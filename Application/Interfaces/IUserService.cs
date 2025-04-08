@@ -1,0 +1,10 @@
+﻿using Application.DTOs.Image;
+using Domain.Models;
+
+namespace Application.Interfaces
+{
+    public interface IUserService
+    {
+        Task<ApplicationUser> UploadUserImageAsync(string userId, ImageUploadRequestDTO request);
+    }
+}
