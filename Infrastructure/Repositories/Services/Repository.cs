@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories.Services
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -14,17 +14,19 @@ namespace Infrastructure.Repositories
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this.DbSet = _db.Set<T>();
+            DbSet = _db.Set<T>();
         }
 
         public async Task AddAsync(T entity)
         {
             await DbSet.AddAsync(entity);
+            await SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
             DbSet.Remove(entity);
+            await SaveChangesAsync();
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, string? includes = null)
@@ -74,6 +76,25 @@ namespace Infrastructure.Repositories
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            DbSet.Update(entity);
+            await SaveChangesAsync();
+        }
+
+        private async Task SaveChangesAsync()
+        {
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log and handle specific database-related exceptions as needed
+                throw new Exception("An error occurred while saving changes to the database.", ex);
+            }
         }
     }
 }

@@ -1,64 +1,41 @@
 ﻿using Application.DTOs.Image;
 using Application.Interfaces;
-using Domain.Models;
+using Domain.Exceptions.User;
 using Infrastructure.Repositories.Interfaces;
 
 namespace Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly IImageRepository _imageRepo;
-        private readonly IUserRepository _userRepo;
+        private readonly IUserRepository _userRepository;
+        private readonly IImageService _imageService;
 
-        public UserService(IImageRepository imageRepo, IUserRepository userRepo)
+        public UserService(IImageService imageService, IUserRepository userRepository)
         {
-            _imageRepo = imageRepo;
-            _userRepo = userRepo;
+            _imageService = imageService;
+            _userRepository = userRepository;
         }
 
-        public async Task<ApplicationUser> UploadUserImageAsync(string userId, ImageUploadRequestDTO request)
+        public async Task<bool> UploadUserImageAsync(string userId, ImageUploadRequestDTO request)
         {
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new UserNotFoundException(userId);
+
+            var user = await _userRepository.GetUserByID(userId)
+                ?? throw new UserNotFoundException(userId);
+
+            // Delete the previous image if any
+            if (user.ImageId.HasValue)
             {
-                throw new Exception("User not found");
+                await _imageService.DeleteAsync((int)user.ImageId);
             }
 
-            var user = await _userRepo.GetUserByID(userId);
-            ValidateFileUpload(request);
+            var imageId = await _imageService.UploadImageAsync(request);
 
-            var image = new Image
-            {
-                File = request.File,
-                FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                FileExtension = Path.GetExtension(request.File.FileName),
-                FileSize = request.File.Length
-            };
+            user.ImageId = imageId;
+            await _userRepository.UpdateAsync(user);
 
-            await _imageRepo.Upload(image);
-            user.ImageId = image.Id;
-            await _userRepo.UpdateAsync(user);
-
-            return user;
-        }
-
-        private void ValidateFileUpload(ImageUploadRequestDTO request)
-        {
-            if (request.File == null)
-            {
-                throw new Exception("File is required");
-            }
-            if (request.File.Length == 0)
-            {
-                throw new Exception("File is empty");
-            }
-            if (request.File.Length > 10 * 1024 * 1024)
-            {
-                throw new Exception("File is too large");
-            }
-            if (request.File.ContentType != "image/jpeg" && request.File.ContentType != "image/png")
-            {
-                throw new Exception("File is not an image");
-            }
+            return true;
         }
     }
 }

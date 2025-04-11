@@ -1,8 +1,8 @@
 ﻿using Application.DTOs.Auth;
-using Application.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using Infrastructure.Repositories.Interfaces;
 using Application.DTOs.User;
+using Application.Interfaces;
+using Domain.Exceptions.User;
 
 namespace Application.Services
 {
@@ -15,20 +15,40 @@ namespace Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
+        public async Task<bool> ConfirmEmailAsync(string userId, string token)
         {
-            return await _userRepository.Login(loginRequestDTO);
+            var isConfirmed = await _userRepository.ConfirmEmailAsync(userId, token);
+
+            if (isConfirmed)
+                return true;
+
+            throw new UserNotActivatedException(userId);  // Custom exception for email confirmation failure
         }
 
-        public async Task<UserDTO> RegisterAsync(RegisterRequestDTO registerRequestDTO)
+        public async Task<string> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
+            var token = await _userRepository.Login(loginRequestDTO);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new InvalidUserCredentialsException();  // Custom exception for invalid credentials
+            }
+
+            return token;
+        }
+
+        public async Task<string> RegisterAsync(RegisterRequestDTO registerRequestDTO)
+        {
+            // Check if email already exists using custom exception for better clarity
             var emailExist = await _userRepository.GetAsync(user => user.Email == registerRequestDTO.Email);
             if (emailExist != null)
             {
-                throw new ValidationException("Email Already exists");
+                throw new EmailAlreadyExistsException(registerRequestDTO.Email);  // Custom exception for email existence
             }
 
-            return await _userRepository.Register(registerRequestDTO);
+            var registeredUser = await _userRepository.Register(registerRequestDTO);
+
+            return "Registration successful! Please check your email for confirmation.";
         }
     }
 }

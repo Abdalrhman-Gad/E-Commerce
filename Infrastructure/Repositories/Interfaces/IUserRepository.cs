@@ -8,12 +8,14 @@ namespace Infrastructure.Repositories.Interfaces
     {
         Task<bool> IsUniqueUserName(string username);
 
-        Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
+        Task<string> Login(LoginRequestDTO user);
 
-        Task<UserDTO> Register(RegisterRequestDTO registerRequestDTO);
+        Task<ApplicationUser> Register(RegisterRequestDTO user);
 
         Task<ApplicationUser> GetUserByID(string userID);
-        
-        Task<bool> UpdateAsync(ApplicationUser user);
+
+        Task<bool> UpdateImageAsync(string userId, int imageId);
+
+        Task<bool> ConfirmEmailAsync(string userId, string token);
     }
 }

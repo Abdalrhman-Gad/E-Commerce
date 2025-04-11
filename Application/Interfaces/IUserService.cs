@@ -5,6 +5,6 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ApplicationUser> UploadUserImageAsync(string userId, ImageUploadRequestDTO request);
+        Task<bool> UploadUserImageAsync(string userId, ImageUploadRequestDTO request);
     }
 }

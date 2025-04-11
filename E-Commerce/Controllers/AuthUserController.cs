@@ -1,6 +1,5 @@
 ﻿using Application.DTOs.Auth;
 using Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Controllers
@@ -20,14 +19,24 @@ namespace E_Commerce.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
             var result = await _authService.LoginAsync(loginRequestDTO);
-            return Ok(result);
+            return Ok(new { status = "success", token = result });
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
             var result = await _authService.RegisterAsync(registerRequestDTO);
-            return Ok(result);
+            return Ok(new { status = "success", message = result });
+        }
+
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            var result = await _authService.ConfirmEmailAsync(userId, token);
+            if (result)
+                return Ok("Email confirmed successfully!");
+
+            return BadRequest("Email confirmation failed.");
         }
     }
 }

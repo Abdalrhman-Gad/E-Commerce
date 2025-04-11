@@ -4,8 +4,10 @@ using Domain.Models;
 using E_Commerce.Middlewares;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
+using Infrastructure.Repositories.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -23,9 +25,15 @@ namespace E_Commerce.Extensions
             services.AddInfrastructureServices(configuration);
 
             // Configure Identity
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(op =>
+            {
+                op.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            //register automapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<SignInManager<ApplicationUser>>();
@@ -34,6 +42,10 @@ namespace E_Commerce.Extensions
             // Add Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IProductService, ProductService>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             // Configure JWT Authentication instead of cookies
             var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"]);
@@ -53,6 +65,11 @@ namespace E_Commerce.Extensions
                     ClockSkew = TimeSpan.FromDays(7)
                 };
             });
+
+            // add authorizations ploicies 
+            services.AddAuthorizationBuilder()
+                .AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+
 
             // Register the global exception handler
             services.AddExceptionHandler<GlobalExceptionHandler>();

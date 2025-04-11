@@ -1,7 +1,6 @@
-﻿using DataAcess.Repos;
-using Infrastructure.Persistence;
-using Infrastructure.Repositories;
+﻿using Infrastructure.Persistence;
 using Infrastructure.Repositories.Interfaces;
+using Infrastructure.Repositories.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +17,7 @@ namespace Infrastructure.Extensions
             // Add Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             return services;
         }

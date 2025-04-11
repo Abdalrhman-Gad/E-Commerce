@@ -22,8 +22,20 @@ namespace E_Commerce.Controllers
         public async Task<IActionResult> UploadUserImage([FromForm] ImageUploadRequestDTO request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+               return Unauthorized("User ID not found.");
+            }
+
             var result = await userService.UploadUserImageAsync(userId, request);
-            return Ok(result);
+
+            if (!result)
+            {
+                return BadRequest("Image upload failed");
+            }
+
+            return Ok(new { status = "success", message = "Image uploaded successfully." });
         }
     }
 }
