@@ -4,6 +4,7 @@ using Domain.Models;
 using E_Commerce.Middlewares;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
+using Infrastructure.Repositories.Interfaces;
 using Infrastructure.Repositories.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -44,8 +45,13 @@ namespace E_Commerce.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            
 
             // Configure JWT Authentication instead of cookies
             var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"]);
