@@ -20,9 +20,7 @@ namespace E_Commerce.Controllers
             _imageService = imageService;
         }
 
-        // ===============================
         // GET: api/Product
-        // ===============================
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetAll([FromQuery] string? categoryName, [FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
         {
@@ -48,9 +46,7 @@ namespace E_Commerce.Controllers
             }
         }
 
-        // ===============================
         // GET: api/Product/{id}
-        // ===============================
         [HttpGet("{id}")]
         public async Task<ActionResult<GetProductDTO>> GetById(int id)
         {
@@ -71,10 +67,8 @@ namespace E_Commerce.Controllers
             }
         }
 
-        // ===============================
         // POST: api/Product
-        // ===============================
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<GetProductDTO>> AddProduct([FromBody] AddProductDTO addProductDto)
         {
@@ -96,10 +90,8 @@ namespace E_Commerce.Controllers
             }
         }
 
-        // ===============================
         // PUT: api/Product/{id}
-        // ===============================
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<GetProductDTO>> UpdateProduct(int id, [FromBody] AddProductDTO updateProductDto)
         {
@@ -126,10 +118,8 @@ namespace E_Commerce.Controllers
             }
         }
 
-        // ===============================
         // DELETE: api/Product/{id}
-        // ===============================
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {
@@ -150,10 +140,8 @@ namespace E_Commerce.Controllers
             }
         }
 
-        // ===============================
         // POST: api/Product/{productId}/upload-image
-        // ===============================
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost("{productId}/upload-image")]
         public async Task<IActionResult> UploadProductImage(int productId, [FromForm] ImageUploadRequestDTO request)
         {
