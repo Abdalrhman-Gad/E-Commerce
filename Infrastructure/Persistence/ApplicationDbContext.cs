@@ -1,9 +1,7 @@
-﻿using Domain.Enums;
-using Domain.Models;
+﻿using Domain.Models;
 using Infrastructure.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence
 {
@@ -44,57 +42,13 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Order>()
-             .HasOne(o => o.ShippingAddress)
-             .WithMany(s => s.Orders)
-             .HasForeignKey(o => o.OrderShippingAddressId)
-             .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Conversation>()
-            .HasOne(c => c.SecondUser)
-            .WithMany()  // One user can be part of many conversations
-            .HasForeignKey(c => c.SecondUserID)
-            .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Message>()
-            .HasOne(m => m.Sender)
-            .WithMany()
-            .HasForeignKey(m => m.SenderID)
-            .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Message>()
-            .HasOne(m => m.Conversation)
-            .WithMany(c => c.Messages)
-            .HasForeignKey(m => m.ConversationID)
-            .OnDelete(DeleteBehavior.NoAction);
-
-
-            builder.Entity<Order>()
-                .Property(Order => Order.Status)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v));
-
-            builder.Entity<Payment>()
-                .Property(Payment => Payment.PaymentStatus)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), v));
-
-            builder.Entity<Payment>()
-                .Property(Payment => Payment.PaymentMethod)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), v));
-
-            builder.Entity<Message>()
-                .Property(Message => Message.MessageStatus)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (MessageStatus)Enum.Parse(typeof(MessageStatus), v));
-
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new ConversationConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
+            builder.ApplyConfiguration(new PaymentConfiguration());
+            builder.ApplyConfiguration(new MessageConfiguration());
+            builder.ApplyConfiguration(new ConversationConfiguration());
         }
     }
 }

@@ -2,8 +2,7 @@
 using System.Net.Mail;
 using System.Net;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Threading.Tasks;
-using System;
+
 
 namespace Infrastructure.Repositories.Services
 {
