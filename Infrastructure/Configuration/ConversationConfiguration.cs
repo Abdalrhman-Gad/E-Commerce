@@ -13,6 +13,10 @@ namespace Infrastructure.Configuration
                 .WithMany()  // One user can be part of many conversations
                 .HasForeignKey(c => c.SecondUserID)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(c => c.CreatedDate)
+                   .HasDefaultValueSql("GETUTCDATE()")
+                   .ValueGeneratedOnAdd();
         }
     }
 }

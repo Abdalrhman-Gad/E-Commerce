@@ -27,14 +27,7 @@ public class ProductService : IProductService
 
         var product = _mapper.Map<Product>(addProduct);
 
-        try
-        {
-            await _productRepository.AddAsync(product);
-        }
-        catch (Exception ex)
-        {
-            throw new ApplicationException("An error occurred while adding the product.", ex);
-        }
+        await _productRepository.AddAsync(product);
 
         return _mapper.Map<GetProductDTO>(product);
     }
@@ -50,12 +43,7 @@ public class ProductService : IProductService
     public async Task<IEnumerable<GetProductDTO>> GetAllAsync(Expression<Func<Product, bool>> filter = null, string? includes = null, int pageSize = 0, int pageNumber = 1)
     {
         var products = await _productRepository.GetAllAsync(filter, includes, pageSize, pageNumber);
-        return _mapper.Map<IEnumerable<GetProductDTO>>(products);
-    }
-
-    public async Task<IEnumerable<GetProductDTO>> GetByCategoryNameAsync(string categoryName, string? includes = null, int pageSize = 0, int pageNumber = 1)
-    {
-        var products = await _productRepository.GetAllAsync(p => p.Category.Name == categoryName, includes, pageSize, pageNumber);
+        
         return _mapper.Map<IEnumerable<GetProductDTO>>(products);
     }
 
@@ -86,6 +74,8 @@ public class ProductService : IProductService
     {
         if (request == null)
             throw new ArgumentNullException(nameof(request), "Image upload request is null.");
+
+        _imageService.ValidateImage(request);
 
         var product = await _productRepository.GetAsync(p => p.ProductId == productId)
             ?? throw new ProductNotFoundException("Product not found.");

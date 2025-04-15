@@ -86,15 +86,7 @@ namespace Infrastructure.Repositories.Services
 
         private async Task SaveChangesAsync()
         {
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                // Log and handle specific database-related exceptions as needed
-                throw new Exception("An error occurred while saving changes to the database.", ex);
-            }
+            await _db.SaveChangesAsync();
         }
     }
 }

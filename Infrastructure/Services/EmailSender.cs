@@ -4,7 +4,7 @@ using System.Net;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 
-namespace Infrastructure.Repositories.Services
+namespace Infrastructure.Services
 {
     public class EmailSender : IEmailSender
     {

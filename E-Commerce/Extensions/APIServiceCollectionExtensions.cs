@@ -1,10 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Services;
 using Domain.Models;
-using E_Commerce.Middlewares;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
-using Infrastructure.Repositories.Services;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -44,6 +43,8 @@ namespace E_Commerce.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IReviewService, ReviewService>();
+           
 
             services.AddTransient<IEmailSender, EmailSender>();
 

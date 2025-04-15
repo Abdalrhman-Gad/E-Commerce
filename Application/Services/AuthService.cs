@@ -1,6 +1,5 @@
 ﻿using Application.DTOs.Auth;
 using Infrastructure.Repositories.Interfaces;
-using Application.DTOs.User;
 using Application.Interfaces;
 using Domain.Exceptions.User;
 

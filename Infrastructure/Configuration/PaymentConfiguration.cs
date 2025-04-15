@@ -10,16 +10,20 @@ namespace Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
             builder
-                .Property(Payment => Payment.PaymentStatus)
+                .Property(p => p.PaymentStatus)
                 .HasConversion(
                     v => v.ToString(),
                     v => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), v));
 
             builder
-                .Property(Payment => Payment.PaymentMethod)
+                .Property(p => p.PaymentMethod)
                 .HasConversion(
                     v => v.ToString(),
                     v => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), v));
+
+            builder.Property(p => p.PaymentDate)
+                   .HasDefaultValueSql("GETUTCDATE()")
+                   .ValueGeneratedOnAdd();
         }
     }
 }

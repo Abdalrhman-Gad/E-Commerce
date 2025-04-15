@@ -1,24 +1,37 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Domain.Exceptions.Product;
+using Domain.Exceptions.Review;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace E_Commerce.Middlewares
+public class GlobalExceptionHandler : IExceptionHandler
 {
-    public class GlobalExceptionHandler : IExceptionHandler
+    private readonly ILogger<GlobalExceptionHandler> _logger;
+
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
     {
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+        _logger = logger;
+    }
+
+    public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken token)
+    {
+        _logger.LogError(exception, "Unhandled exception occurred.");
+
+        var statusCode = exception switch
         {
-            var problemDetails = new ProblemDetails
-            {
-                Title = "An error occurred",
-                Status = StatusCodes.Status400BadRequest,
-                Detail = exception.Message
-            };
+            ReviewNotFoundException => StatusCodes.Status404NotFound,
+            ProductNotFoundException => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError
+        };
 
-            httpContext.Response.StatusCode = problemDetails.Status.Value;
+        var problem = new ProblemDetails
+        {
+            Title = "Something went wrong",
+            Status = statusCode,
+            Detail = exception.Message
+        };
 
-            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-
-            return true;
-        }
+        context.Response.StatusCode = statusCode;
+        await context.Response.WriteAsJsonAsync(problem, token);
+        return true;
     }
 }

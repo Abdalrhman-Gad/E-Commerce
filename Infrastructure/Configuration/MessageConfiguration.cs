@@ -22,10 +22,14 @@ namespace Infrastructure.Configuration
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder
-                .Property(Message => Message.MessageStatus)
+                .Property(m => m.MessageStatus)
                 .HasConversion(
                     v => v.ToString(),
                     v => (MessageStatus)Enum.Parse(typeof(MessageStatus), v));
+
+            builder.Property(m => m.MessageDate)
+                   .HasDefaultValueSql("GETUTCDATE()")
+                   .ValueGeneratedOnAdd();
         }
     }
 }
