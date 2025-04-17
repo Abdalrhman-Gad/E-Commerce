@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
@@ -12,6 +13,11 @@ namespace Domain.Models
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        public int? ImageId { get; set; }
+
+        [ForeignKey("ImageId")]
+        public Image Image { get; set; }
 
         public ICollection<Product> Products { get; set; }
     }
