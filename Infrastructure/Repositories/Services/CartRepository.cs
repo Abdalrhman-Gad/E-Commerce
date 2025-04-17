@@ -4,9 +4,9 @@ using Infrastructure.Repositories.Interfaces;
 
 namespace Infrastructure.Repositories.Services
 {
-    public class ProductRepository : Repository<Product>, IProductRepository
+    public class CartRepository : Repository<Cart>, ICartRepository
     {
-        public ProductRepository(ApplicationDbContext db) : base(db)
+        public CartRepository(ApplicationDbContext db) : base(db)
         {
         }
     }

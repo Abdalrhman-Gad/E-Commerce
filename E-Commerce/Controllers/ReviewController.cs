@@ -50,9 +50,9 @@ namespace E_Commerce.Controllers
         // PUT api/<ReviewsController>/5
         [Authorize(Roles = "admin,user")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ReviewDTO>> Put(int id, [FromBody] AddReviewDTO updateReview)
+        public async Task<ActionResult<ReviewDTO>> Put(int id, [FromBody] UpdateReviewDTO updateReview)
         {
-            var updatedReview = await _reviewService.UpdateAsync(id, updateReview);
+             var updatedReview = await _reviewService.UpdateAsync(id, updateReview);
 
             return Ok(updatedReview);
         }

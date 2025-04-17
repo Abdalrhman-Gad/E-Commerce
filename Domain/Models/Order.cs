@@ -23,7 +23,7 @@ public class Order
     public int OrderShippingAddressId { get; set; } // Foreign key to ShippingAddress
     public ShippingAddress ShippingAddress { get; set; }
 
-    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public ICollection<OrderItem> OrderItems { get; set; } = [];
 
     public Payment Payment { get; set; }
 }

@@ -49,6 +49,7 @@ namespace Infrastructure.Persistence
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new MessageConfiguration());
             builder.ApplyConfiguration(new ConversationConfiguration());
+            builder.ApplyConfiguration(new CartConfiguration());
         }
     }
 }

@@ -40,16 +40,16 @@ public class ProductService : IProductService
         await _productRepository.DeleteAsync(product);
     }
 
-    public async Task<IEnumerable<GetProductDTO>> GetAllAsync(Expression<Func<Product, bool>> filter = null, string? includes = null, int pageSize = 0, int pageNumber = 1)
+    public async Task<IEnumerable<GetProductDTO>> GetAllAsync(Expression<Func<Product, bool>> filter = null, int pageSize = 0, int pageNumber = 1)
     {
-        var products = await _productRepository.GetAllAsync(filter, includes, pageSize, pageNumber);
-        
+        var products = await _productRepository.GetAllAsync(filter, includes: "Category,Image", pageSize, pageNumber);
+
         return _mapper.Map<IEnumerable<GetProductDTO>>(products);
     }
 
     public async Task<GetProductDTO> GetByIdAsync(int productId)
     {
-        var product = await _productRepository.GetAsync(p => p.ProductId == productId)
+        var product = await _productRepository.GetAsync(p => p.ProductId == productId, includes: "Category,Image")
             ?? throw new ProductNotFoundException("Product not found.");
 
         return _mapper.Map<GetProductDTO>(product);
@@ -57,7 +57,8 @@ public class ProductService : IProductService
 
     public async Task<GetProductDTO> UpdateAsync(int id, AddProductDTO addProduct)
     {
-        var product = await _productRepository.GetAsync(p => p.ProductId == id)
+        var product = await _productRepository.GetAsync(
+            filter: p => p.ProductId == id, includes: "Category,Image")
             ?? throw new ProductNotFoundException("Product not found.");
 
         if (addProduct == null)

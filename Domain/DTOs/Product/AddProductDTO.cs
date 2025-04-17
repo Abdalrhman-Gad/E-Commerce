@@ -16,7 +16,7 @@ namespace Domain.DTOs.Product
         public decimal? Discount { get; set; }
 
         public int? ImageId { get; set; }
-
+            
         public int CategoryId { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Image;
-using Domain.Models;
 
 namespace Application.Interfaces
 {
