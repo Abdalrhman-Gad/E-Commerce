@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Middlewares;
 using Application.Services;
 using Domain.Models;
 using Infrastructure.Extensions;
@@ -30,6 +31,8 @@ namespace E_Commerce.Extensions
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddHttpContextAccessor();
 
             //register automapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

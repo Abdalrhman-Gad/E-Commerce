@@ -17,8 +17,8 @@ namespace E_Commerce.Controllers
             this.userService = userService;
         }
 
+        [Authorize(Roles ="admin,user")]
         [HttpPost("uploadUserImage")]
-        [Authorize]
         public async Task<IActionResult> UploadUserImage([FromForm] ImageUploadRequestDTO request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -4,13 +4,12 @@ using Domain.Models;
 
 namespace Application.Mappings
 {
-    public class ReviewProfile : Profile
+    public class ReviewProfile :
+        BaseMappingProfileWithUpdate<Review, AddReviewDTO, UpdateReviewDTO, ReviewDTO>
     {
         public ReviewProfile()
         {
-            CreateMap<Review,AddReviewDTO>().ReverseMap();
 
-            CreateMap<Review, ReviewDTO>().ReverseMap();
         }
     }
 }

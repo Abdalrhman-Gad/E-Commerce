@@ -80,10 +80,10 @@ namespace E_Commerce.Controllers
 
         // POST: api/Product/5/upload-image
         [Authorize(Roles = "admin")]
-        [HttpPost("{productId}/upload-image")]
-        public async Task<IActionResult> UploadImage(int productId, [FromForm] ImageUploadRequestDTO request)
+        [HttpPost("{id}/upload-image")]
+        public async Task<IActionResult> UploadImage(int id, [FromForm] ImageUploadRequestDTO request)
         {
-            await _productService.UploadProductImageAsync(productId, request);
+            await _productService.UploadProductImageAsync(id, request);
             
             return Ok(new { Message = "Image uploaded successfully." });
         }
