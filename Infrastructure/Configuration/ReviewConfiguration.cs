@@ -8,6 +8,9 @@ namespace Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<Review> builder)
         {
+            builder.HasIndex(r => new { r.UserId, r.ProductId })
+                .IsUnique();
+
             builder.Property(r => r.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()")
                    .ValueGeneratedOnAdd();

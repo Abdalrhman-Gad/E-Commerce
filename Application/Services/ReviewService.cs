@@ -5,6 +5,8 @@ using Domain.Exceptions.Review;
 using Domain.Models;
 using Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -16,8 +18,10 @@ namespace Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        public ReviewService(IReviewRepository reviewRepository,
-            IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public ReviewService(
+            IReviewRepository reviewRepository,
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
@@ -26,15 +30,11 @@ namespace Application.Services
 
         public async Task<ReviewDTO> AddAsync(AddReviewDTO addReview)
         {
-            if (addReview == null) throw new InvalidReviewException("Review data is invalid");
+            if (addReview == null)
+                throw new InvalidReviewException("Review data is invalid");
 
-            var review = await _reviewRepository.GetAsync(
-                r => r.UserId == GetCurrentUserId() && r.ProductId == addReview.ProductId);
-
-            if (review != null)
-            {
-                throw new ReviewAlreadySubmittedException("You have already submitted a review for this product.");
-            }
+            var review = _mapper.Map<Review>(addReview);
+            review.UserId = GetCurrentUserId();
 
             try
             {
@@ -42,26 +42,31 @@ namespace Application.Services
 
                 return _mapper.Map<ReviewDTO>(review);
             }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx &&
+                                                (sqlEx.Number == 2601 || sqlEx.Number == 2627))
+            {
+                throw new ReviewAlreadySubmittedException("You have already submitted a review for this product.");
+            }
             catch (Exception ex)
             {
                 throw new ApplicationException("An error occurred while adding the review.", ex);
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(string userId)
         {
             var review = await _reviewRepository.GetAsync(
-                r => r.ReviewId == id && r.UserId == GetCurrentUserId()) ??
-                throw new ReviewNotFoundException("Review not found.");
+                r => r.UserId == GetCurrentUserId())
+                ?? throw new ReviewNotFoundException("Review not found.");
 
             await _reviewRepository.DeleteAsync(review);
         }
 
-        public async Task<IEnumerable<ReviewDTO>> GetAllAsync(Expression<Func<Review, bool>>? filter = null, int pageSize = 0, int pageNumber = 1)
+        public async Task<IEnumerable<ReviewDTO>> GetAllAsync(
+            Expression<Func<Review, bool>>? filter = null, int pageSize = 0, int pageNumber = 1)
         {
             var reviews = await _reviewRepository.GetAllAsync(
                 filter: filter,
-                includes: null,
                 pageSize: pageSize,
                 pageNumber: pageNumber
             );
@@ -71,7 +76,8 @@ namespace Application.Services
 
         public async Task<ReviewDTO> GetByIdAsync(int id)
         {
-            var review = await _reviewRepository.GetAsync(r => r.ReviewId == id);
+            var review = await _reviewRepository.GetAsync(r => r.ReviewId == id)
+                ?? throw new ReviewNotFoundException("Review not found.");
 
             return _mapper.Map<ReviewDTO>(review);
         }
@@ -79,11 +85,10 @@ namespace Application.Services
         public async Task<ReviewDTO> UpdateAsync(int id, UpdateReviewDTO updateReview)
         {
             var review = await _reviewRepository.GetAsync(
-                r => r.ReviewId == id && r.UserId == GetCurrentUserId()) ??
-                throw new ReviewNotFoundException("Review not found.");
+                r => r.ReviewId == id && r.UserId == GetCurrentUserId())
+                ?? throw new ReviewNotFoundException("Review not found.");
 
-            review.Comment = updateReview.Comment;
-            review.Rating = updateReview.Rating;
+            _mapper.Map(updateReview, review);
 
             await _reviewRepository.UpdateAsync(review);
 

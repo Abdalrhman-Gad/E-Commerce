@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces
+﻿namespace Application.Interfaces.IServices
 {
     public interface IUpdatableService<TGet, TUpdate>
         where TGet : class

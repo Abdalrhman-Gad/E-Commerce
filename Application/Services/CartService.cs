@@ -5,9 +5,7 @@ using Domain.DTOs.Cart;
 using Domain.Exceptions.Cart;
 using Domain.Models;
 using Infrastructure.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
-using System.Security.Claims;
 
 namespace Application.Services
 {
