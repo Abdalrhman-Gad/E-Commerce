@@ -48,6 +48,8 @@ namespace E_Commerce.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IShippingAddressService, ShippingAddressService>();
 
             services.AddScoped<IReviewService, ReviewService>();
            

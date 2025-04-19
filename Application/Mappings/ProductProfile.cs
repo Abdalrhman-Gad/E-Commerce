@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Mappings.BaseProfiles;
+using AutoMapper;
 using Domain.DTOs.Product;
 using Domain.Models;
 

@@ -2,6 +2,7 @@
 using Domain.DTOs.Review;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace E_Commerce.Controllers
 {
@@ -52,7 +53,7 @@ namespace E_Commerce.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ReviewDTO>> Put(int id, [FromBody] UpdateReviewDTO updateReview)
         {
-             var updatedReview = await _reviewService.UpdateAsync(id, updateReview);
+            var updatedReview = await _reviewService.UpdateAsync(id, updateReview);
 
             return Ok(updatedReview);
         }
@@ -60,9 +61,11 @@ namespace E_Commerce.Controllers
         // DELETE api/<ReviewsController>/5
         [Authorize(Roles = "admin,user")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete()
         {
-            await _reviewService.DeleteAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _reviewService.DeleteAsync(userId);
 
             return NoContent();
         }

@@ -19,6 +19,11 @@ namespace Infrastructure.Extensions
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
+
+            //not done
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
 
             return services;
         }

@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="Mappings\" />
     <Folder Include="Images\" />
   </ItemGroup>
 

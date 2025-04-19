@@ -29,9 +29,9 @@ namespace Application.Services
             return _mapper.Map<CartDTO>(cart);
         }
 
-        public async Task DeleteAsync(int cartId)
+        public async Task DeleteAsync(string userId)
         {
-            var cart = await _cartRepository.GetAsync(c => c.CartId == cartId) ??
+            var cart = await _cartRepository.GetAsync(c => c.UserId == userId) ??
                        throw new CartNotFoundException("Cart not found.");
 
             await _cartRepository.DeleteAsync(cart);

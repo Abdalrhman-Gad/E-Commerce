@@ -9,7 +9,7 @@ namespace Application.Interfaces
         IReadableService<Product,GetProductDTO>, 
         IUpdatableService<GetProductDTO,AddProductDTO>,
         ICreatableService<AddProductDTO, GetProductDTO>,
-        IDeletableService
+        IDeletableService<int>
     {
         Task<bool> UploadProductImageAsync(int productId, ImageUploadRequestDTO request);
     }

@@ -50,6 +50,7 @@ namespace Infrastructure.Persistence
             builder.ApplyConfiguration(new MessageConfiguration());
             builder.ApplyConfiguration(new ConversationConfiguration());
             builder.ApplyConfiguration(new CartConfiguration());
+            builder.ApplyConfiguration(new CartItemConfiguration());
         }
     }
 }
