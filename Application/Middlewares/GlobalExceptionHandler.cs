@@ -1,4 +1,5 @@
 ﻿using Domain.Exceptions.Cart;
+using Domain.Exceptions.Category;
 using Domain.Exceptions.Product;
 using Domain.Exceptions.Review;
 using Microsoft.AspNetCore.Diagnostics;
@@ -26,6 +27,7 @@ namespace Application.Middlewares
                 ReviewNotFoundException => StatusCodes.Status404NotFound,
                 ProductNotFoundException => StatusCodes.Status404NotFound,
                 CartNotFoundException => StatusCodes.Status404NotFound,
+                CategoryNotFoundException => StatusCodes.Status404NotFound,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };

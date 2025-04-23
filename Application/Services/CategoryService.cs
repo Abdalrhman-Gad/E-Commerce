@@ -37,10 +37,10 @@ public class CategoryService : ICategoryService
 
         await _categoryRepository.DeleteAsync(category);
     }
-
-    public async Task<IEnumerable<GetCategoryDTO>> GetAllAsync(Expression<Func<Category, bool>>? filter = null, string? includes = null, int pageSize = 0, int pageNumber = 1)
+    
+    public async Task<IEnumerable<GetCategoryDTO>> GetAllAsync(Expression<Func<Category, bool>>? filter = null, int pageSize = 0, int pageNumber = 1)
     {
-        var categories = await _categoryRepository.GetAllAsync(filter, includes, pageSize, pageNumber);
+        var categories = await _categoryRepository.GetAllAsync(filter,null, pageSize, pageNumber);
         return _mapper.Map<IEnumerable<GetCategoryDTO>>(categories);
     }
 
@@ -99,4 +99,6 @@ public class CategoryService : ICategoryService
 
         return true;
     }
+
+    
 }
