@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Auth;
+using Domain.DTOs.Auth;
 using Domain.Exceptions.User;
 using Domain.Models;
 using Infrastructure.Persistence;

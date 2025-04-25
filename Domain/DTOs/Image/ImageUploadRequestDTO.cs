@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace Application.DTOs.Image
+namespace Domain.DTOs.Image
 {
     public class ImageUploadRequestDTO
     {

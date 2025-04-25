@@ -1,5 +1,6 @@
-﻿using Application.DTOs.Auth;
+﻿using Domain.DTOs.Auth;
 using Application.DTOs.User;
+using Application.DTOs.Auth;
 
 namespace Application.Interfaces
 {

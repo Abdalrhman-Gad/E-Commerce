@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Image;
+﻿using Domain.DTOs.Image;
 using Application.Interfaces;
 using Domain.Exceptions.Image;
 using Domain.Models;

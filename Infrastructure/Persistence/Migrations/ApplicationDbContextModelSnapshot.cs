@@ -61,9 +61,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("CartItemId");
 
-                    b.HasIndex("CartId");
-
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("CartId", "ProductId")
+                        .IsUnique();
 
                     b.ToTable("CartItems");
                 });
@@ -105,7 +106,9 @@ namespace Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationID"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("FirstUserID")
                         .IsRequired()
@@ -160,16 +163,20 @@ namespace Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("ConversationID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("MessageDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("MessageStatus")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MessageText")
                         .IsRequired()
@@ -185,6 +192,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ConversationID");
 
@@ -236,7 +245,9 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -606,7 +617,9 @@ namespace Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("OrderShippingAddressId")
                         .HasColumnType("int");
@@ -709,6 +722,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Message", b =>
                 {
+                    b.HasOne("Domain.Models.ApplicationUser", null)
+                        .WithMany("SentMessages")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Domain.Models.Conversation", "Conversation")
                         .WithMany("Messages")
                         .HasForeignKey("ConversationID")
@@ -716,9 +733,9 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.ApplicationUser", "Receiver")
-                        .WithMany()
+                        .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Models.ApplicationUser", "Sender")
@@ -934,7 +951,11 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Navigation("Orders");
 
+                    b.Navigation("ReceivedMessages");
+
                     b.Navigation("Reviews");
+
+                    b.Navigation("SentMessages");
 
                     b.Navigation("ShippingAddresses");
                 });

@@ -11,12 +11,12 @@ namespace Domain.Models
 
         public string SecondUserID { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public ApplicationUser FirstUser { get; set; }
 
         public ApplicationUser SecondUser { get; set; }
 
-        public ICollection<Message> Messages { get; set; } = [];
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
     }
 }

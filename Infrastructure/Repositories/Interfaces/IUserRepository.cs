@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Auth;
-using Application.DTOs.User;
+using Domain.DTOs.Auth;
 using Domain.Models;
 
 namespace Infrastructure.Repositories.Interfaces

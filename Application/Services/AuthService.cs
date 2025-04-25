@@ -1,8 +1,9 @@
-﻿using Application.DTOs.Auth;
+﻿using Domain.DTOs.Auth;
 using Infrastructure.Repositories.Interfaces;
 using Application.DTOs.User;
 using Application.Interfaces;
 using Domain.Exceptions.User;
+using Application.DTOs.Auth;
 
 namespace Application.Services
 {

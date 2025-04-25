@@ -20,6 +20,7 @@ namespace E_Commerce.Extensions
         public static IServiceCollection AddAPIServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
+            services.AddSignalR();
             services.AddHttpContextAccessor();
             services.AddEndpointsApiExplorer();
 
@@ -39,6 +40,9 @@ namespace E_Commerce.Extensions
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<SignInManager<ApplicationUser>>();
             services.AddScoped<RoleManager<IdentityRole>>();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //        .AddEntityFrameworkStores<ApplicationDbContext>()
+            //        .AddDefaultTokenProviders();
 
             // Add Services
             services.AddScoped<IAuthService, AuthService>();
@@ -51,8 +55,10 @@ namespace E_Commerce.Extensions
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-            
-
+            services.AddScoped<IConversationRepository, ConversationRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IConversationService, ConversationService>();
+            services.AddScoped<IMessageService, MessageService>();
             // Configure JWT Authentication instead of cookies
             var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"]);
             services.AddAuthentication(options =>
