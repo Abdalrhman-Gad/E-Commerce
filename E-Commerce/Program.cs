@@ -1,4 +1,5 @@
 using E_Commerce.Extensions;
+using E_Commerce.Hubs;
 using Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
@@ -33,5 +34,5 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.MapControllers();
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();

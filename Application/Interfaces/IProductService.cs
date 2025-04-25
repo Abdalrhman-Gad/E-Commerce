@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Image;
+﻿using Domain.DTOs.Image;
 using Application.Interfaces.IServices;
 using Domain.DTOs.Product;
 using Domain.Models;

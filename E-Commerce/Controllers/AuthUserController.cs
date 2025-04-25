@@ -1,6 +1,7 @@
-﻿using Application.DTOs.Auth;
+﻿using Domain.DTOs.Auth;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Application.DTOs.Auth;
 
 namespace E_Commerce.Controllers
 {

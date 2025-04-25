@@ -16,6 +16,9 @@ namespace Domain.Models
 
         public Cart Cart { get; set; }
 
+        public ICollection<Message> SentMessages { get; set; }
+        public ICollection<Message> ReceivedMessages { get; set; }
+
         public ICollection<ShippingAddress> ShippingAddresses { get; set; } = [];
 
         public ICollection<Review> Reviews { get; set; } = [];

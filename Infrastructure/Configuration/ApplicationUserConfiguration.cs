@@ -8,7 +8,15 @@ namespace Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.HasMany(u => u.SentMessages)
+                   .WithOne(m => m.Sender)
+                   .HasForeignKey(m => m.SenderID)
+                   .OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasMany(u => u.ReceivedMessages)
+                   .WithOne(m => m.Receiver)
+                   .HasForeignKey(m => m.ReceiverID)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

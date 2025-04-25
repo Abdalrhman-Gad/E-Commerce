@@ -44,7 +44,6 @@ namespace Infrastructure.Persistence
 
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
-            builder.ApplyConfiguration(new ConversationConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new MessageConfiguration());

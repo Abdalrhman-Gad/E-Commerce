@@ -1,7 +1,6 @@
-﻿using Application.DTOs.Image;
+﻿using Domain.DTOs.Image;
 using Application.Interfaces.IServices;
 using Domain.DTOs.Category;
-using Domain.DTOs.Product;
 using Domain.Models;
 
 namespace Application.Interfaces
@@ -14,5 +13,6 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<GetCategoryDTO>> SearchByNameAsync(string name);
         Task<bool> UploadCategoryImageAsync(int categoryId, ImageUploadRequestDTO request);
+
     }
 }

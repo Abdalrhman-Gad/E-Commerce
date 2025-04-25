@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Image;
+﻿using Domain.DTOs.Image;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.DTOs.Category;
