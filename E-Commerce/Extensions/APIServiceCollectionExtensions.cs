@@ -52,7 +52,8 @@ namespace E_Commerce.Extensions
             services.AddScoped<IShippingAddressService, ShippingAddressService>();
 
             services.AddScoped<IReviewService, ReviewService>();
-           
+
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
 

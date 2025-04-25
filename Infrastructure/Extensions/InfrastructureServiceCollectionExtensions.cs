@@ -20,6 +20,8 @@ namespace Infrastructure.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+
 
             //not done
             services.AddScoped<ICartRepository, CartRepository>();
