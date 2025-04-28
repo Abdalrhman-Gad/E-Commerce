@@ -17,10 +17,12 @@ namespace Infrastructure.Repositories.Services
             DbSet = _db.Set<T>();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             await DbSet.AddAsync(entity);
             await SaveChangesAsync();
+
+            return entity;
         }
 
         public async Task DeleteAsync(T entity)

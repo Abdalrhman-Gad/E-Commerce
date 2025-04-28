@@ -14,8 +14,6 @@ namespace Domain.Models
         [ForeignKey("ImageId")]
         public Image Image { get; set; }
 
-        public Cart Cart { get; set; }
-
         public ICollection<Message> SentMessages { get; set; }
         public ICollection<Message> ReceivedMessages { get; set; }
 

@@ -14,10 +14,6 @@ namespace Infrastructure.Persistence
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-        public DbSet<Cart> Carts { get; set; }
-
-        public DbSet<CartItem> CartItems { get; set; }
-
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Image> Images { get; set; }
@@ -48,8 +44,6 @@ namespace Infrastructure.Persistence
             builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new MessageConfiguration());
             builder.ApplyConfiguration(new ConversationConfiguration());
-            builder.ApplyConfiguration(new CartConfiguration());
-            builder.ApplyConfiguration(new CartItemConfiguration());
         }
     }
 }

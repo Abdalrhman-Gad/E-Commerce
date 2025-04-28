@@ -2,8 +2,7 @@
 
 namespace Infrastructure.Repositories.Interfaces
 {
-    public interface ICartRepository : IRepository<Cart>
+    public interface IOrderItemRepository : IRepository<OrderItem>
     {
-
     }
 }

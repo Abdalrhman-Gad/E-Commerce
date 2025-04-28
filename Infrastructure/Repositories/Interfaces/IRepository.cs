@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories.Interfaces
        
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includes = null, int pageSize = 0, int pageNumber = 1);
         
-        Task AddAsync(T entity);
+        Task<T> AddAsync(T entity);
         
         Task DeleteAsync(T entity);
 
