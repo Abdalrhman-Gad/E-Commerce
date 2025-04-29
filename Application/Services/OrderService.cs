@@ -1,10 +1,14 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using Domain.DTOs.Order;
+using Domain.Enums;
 using Domain.Exceptions.Order;
 using Domain.Exceptions.OrderItem;
+using Domain.Exceptions.Product;
 using Infrastructure.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace Application.Services
 {
@@ -13,15 +17,21 @@ namespace Application.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IProductRepository _productRepository;
 
         public OrderService(
             IOrderRepository orderRepository,
             IOrderItemRepository orderItemRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
             _orderItemRepository = orderItemRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _productRepository = productRepository;
         }
 
         public async Task<OrderDTO> AddAsync(AddOrderDTO addOrder)
@@ -31,10 +41,16 @@ namespace Application.Services
 
             var order = _mapper.Map<Order>(addOrder);
 
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            order.UserId = userId;
+
             using var transaction = await _orderRepository.BeginTransactionAsync();
             try
             {
                 var addedOrder = await _orderRepository.AddAsync(order);
+
+                addedOrder.Status = OrderStatus.Pending;
 
                 foreach (var item in order.OrderItems)
                 {
@@ -44,7 +60,15 @@ namespace Application.Services
                     if (item.Quantity <= 0 || item.UnitPrice <= 0)
                         throw new InvalidOrderItemException("Order item must have positive quantity and price.");
 
+                    var product = await _productRepository.GetAsync(p => p.ProductId == item.ProductId) ??
+                        throw new ProductNotFoundException("Product not found.");
+
+                    if (product.Stock < item.Quantity)
+                        throw new InvalidOrderItemException("Order item stock is less than quantity.");
+
                     item.OrderId = addedOrder.OrderId;
+                    item.OrderItemId = default;
+
                     await _orderItemRepository.AddAsync(item);
                 }
 

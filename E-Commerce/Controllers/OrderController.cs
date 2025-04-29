@@ -19,7 +19,7 @@ namespace E_Commerce.Controllers
         }
 
         // GET: api/<OrderController>
-        [Authorize(Roles = "admin, user")]
+        [Authorize(Roles = "admin,user")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> Get([FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
         {
@@ -34,7 +34,7 @@ namespace E_Commerce.Controllers
         }
 
         // GET api/<OrderController>/5
-        [Authorize(Roles = "admin, user")]
+        [Authorize(Roles = "admin,user")]
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderDTO>> Get(int id)
         {
@@ -55,7 +55,8 @@ namespace E_Commerce.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderDTO>> Post([FromBody] AddOrderDTO addOrder)
         {
-            try {
+            try 
+            {
                 var createdOrder = await _orderService.AddAsync(addOrder);
 
                 return CreatedAtAction(nameof(Get), new { id = createdOrder.OrderId }, createdOrder);
@@ -68,7 +69,7 @@ namespace E_Commerce.Controllers
 
 
         // PUT api/<OrderController>/5
-        [Authorize(Roles = "admin, user")]
+        [Authorize(Roles = "admin,user")]
         [HttpPut("{id}")]
         public async Task<ActionResult<OrderDTO>> Put(int id, [FromBody] UpdateOrderDTO updateOrder)
         {
@@ -89,7 +90,7 @@ namespace E_Commerce.Controllers
         }
 
         // DELETE api/<OrderController>/5
-        [Authorize(Roles = "admin, user")]
+        [Authorize(Roles = "admin,user")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

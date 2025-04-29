@@ -69,6 +69,7 @@ namespace E_Commerce.Extensions
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             // Configure JWT Authentication instead of cookies
             var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"]);
